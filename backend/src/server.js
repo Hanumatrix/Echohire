@@ -7,11 +7,11 @@ const app = express();
 
 const __dirname = path.resolve();
 
-app.get("/health", (req, res) => {
+app.get(["/health", "/api/health"], (req, res) => {
   res.status(200).json({ msg: "success from backend 1234" });
 });
 
-app.get("/books", (req, res) => {
+app.get(["/books", "/api/books"], (req, res) => {
   res.status(200).json({ msg: "books endpoint" });
 });
 
@@ -24,6 +24,10 @@ if (ENV.NODE_ENV === "production") {
   });
 }
 
-app.listen(ENV.PORT, () =>
-  console.log("server is running on port: ", ENV.PORT),
-);
+if (!process.env.VERCEL) {
+  app.listen(ENV.PORT, () =>
+    console.log("server is running on port: ", ENV.PORT),
+  );
+}
+
+export default app;
